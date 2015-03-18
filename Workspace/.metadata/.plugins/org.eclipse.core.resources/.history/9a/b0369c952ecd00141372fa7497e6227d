@@ -1,0 +1,5 @@
+package io.shparki.vholt.gfx;
+
+public class Window {
+
+}
