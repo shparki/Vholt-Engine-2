@@ -10,6 +10,7 @@ public abstract class Game {
 		engine = new Engine(this);
 	}
 	
+	public abstract void init();
 	public abstract void update();
 	public abstract void render(Graphics2D g2d);
 }

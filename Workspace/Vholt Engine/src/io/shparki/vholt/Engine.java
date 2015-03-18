@@ -11,14 +11,16 @@ import java.awt.image.BufferStrategy;
 
 public class Engine extends Canvas implements Runnable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final int TARGET_UPS = 60;
 	public static final long SECOND = 1_000_000_000L;
 	public static final long PERIOD = SECOND / TARGET_UPS;
 	private int currentUPS, currentFPS;
 	private int UPS, FPS;
-	
-	private int width, height;
-	private String title, version;
+
 	private volatile boolean running;
 	private volatile Thread animator;
 	
@@ -28,10 +30,6 @@ public class Engine extends Canvas implements Runnable{
 	
 	
 	public Engine(int width, int height, String title, String version, Game game){
-		this.width = width;
-		this.height = height; 
-		this.title = title;
-		this.version = version;
 		this.game = game;
 	
 		Window.create(width, height, title + " | " + version, this);
@@ -51,19 +49,47 @@ public class Engine extends Canvas implements Runnable{
 	}
 	
 	public void run(){
+		long beforeTime, currentTime = System.nanoTime();
+		long deltaTime = 0;
+		long upsCounter = 0, secCounter = 0;
 		
+		init();
 		
 		running = true;
 		while (running){
+			beforeTime = currentTime;
+			currentTime = System.nanoTime();
+			deltaTime = currentTime - beforeTime;
 			
+			upsCounter += deltaTime;
+			if (upsCounter >= PERIOD){
+				upsCounter -= PERIOD;
+				update();
+				currentUPS ++;
+			}
+			
+			render();
+			currentFPS ++;
+			
+			secCounter += deltaTime;
+			if (secCounter >= SECOND){
+				secCounter -= SECOND;
+				UPS = currentUPS; FPS = currentFPS;
+				currentUPS = 0; currentFPS = 0;
+				System.out.println("UPS: " + UPS + " | FPS: " + FPS);
+			}
 		}
 		System.exit(0);
 	}
 	
+	public void init(){
+		game.init();
+	}
 	public void update(){
-		if (Input.isKeyPressed(KeyEvent.VK_W)) { System.out.print(":"); }
-		if (Input.isKeyDown(KeyEvent.VK_W)) { System.out.print("-"); }
-		if (Input.isKeyReleased(KeyEvent.VK_W)) { System.out.print(")"); }
+		
+		game.update();
+		
+		Input.update();
 	}
 	public void render(){
 		if (bs == null){
@@ -79,8 +105,9 @@ public class Engine extends Canvas implements Runnable{
 		g2d.setColor(Color.BLACK);
 		g2d.fillRect(0, 0, Window.getWidth(), Window.getHeight());
 		
+		game.render(g2d);
+		
 		bs.show();
 		g2d.dispose();
 	}
-	
 }
