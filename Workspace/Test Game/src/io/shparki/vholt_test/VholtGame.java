@@ -10,7 +10,9 @@ public class VholtGame extends Game{
 		super();
 	}
 	
-	
+	public void init(){
+		
+	}
 	public void update(){
 		
 	}

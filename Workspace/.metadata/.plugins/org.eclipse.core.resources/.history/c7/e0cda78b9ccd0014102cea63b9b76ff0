@@ -1,0 +1,5 @@
+package io.shparki.vholt.util;
+
+public class Point {
+
+}
