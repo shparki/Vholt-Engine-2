@@ -2,4 +2,5 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="io.shparki.vholt.gfx.Window"/>
 <fullyQualifiedTypeName name="io.shparki.vholt.io.Input"/>
+<fullyQualifiedTypeName name="io.shparki.vholt.util.Time"/>
 </qualifiedTypeNameHistroy>
